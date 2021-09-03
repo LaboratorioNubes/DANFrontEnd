@@ -1,50 +1,63 @@
-import React from 'react';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import AttachMoney from '@material-ui/icons/AttachMoney';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import PeopleIcon from '@material-ui/icons/People';
-import BarChartIcon from '@material-ui/icons/BarChart';
-import LayersIcon from '@material-ui/icons/Layers';
-import AssignmentIcon from '@material-ui/icons/Assignment';
+import React from "react";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListSubheader from "@material-ui/core/ListSubheader";
+import DashboardIcon from "@material-ui/icons/Dashboard";
+import AttachMoney from "@material-ui/icons/AttachMoney";
+import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+import PeopleIcon from "@material-ui/icons/People";
+import BarChartIcon from "@material-ui/icons/BarChart";
+import LayersIcon from "@material-ui/icons/Layers";
+import AssignmentIcon from "@material-ui/icons/Assignment";
+import PropTypes from "prop-types";
 
-export const mainListItems = (
-  <div>
-    <ListItem button>
-      <ListItemIcon>
-        <DashboardIcon />
-      </ListItemIcon>
-      <ListItemText primary="Dashboard" />
-    </ListItem>
-    <ListItem button /*onClick={this.newOrderRedirection 1|}*/>
-      <ListItemIcon>
-        <ShoppingCartIcon />
-      </ListItemIcon>
-      <ListItemText primary=" New Orders" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <AttachMoney />
-      </ListItemIcon>
-      <ListItemText primary="Customers" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <BarChartIcon />
-      </ListItemIcon>
-      <ListItemText primary="Reports" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <LayersIcon />
-      </ListItemIcon>
-      <ListItemText primary="Integrations" />
-    </ListItem>
-  </div>
-);
+export const MainListItems = (props) => {
+  return (
+    <div>
+      <ListItem button>
+        <ListItemIcon>
+          <DashboardIcon />
+        </ListItemIcon>
+        <ListItemText primary="Dashboard" />
+      </ListItem>
+      <ListItem
+        button
+        name="newOrders"
+        /*onClick={(e, o) => {
+          console.log(e);
+        }}*/
+      >
+        <ListItemIcon>
+          <ShoppingCartIcon />
+        </ListItemIcon>
+        <ListItemText primary="New Orders" />
+      </ListItem>
+      <ListItem
+        button
+        name="newPayment"
+        onClick={props.handleNewPayment}
+      >
+        <ListItemIcon>
+          <AttachMoney />
+        </ListItemIcon>
+        <ListItemText primary="New Payment" />
+      </ListItem>
+      <ListItem button>
+        <ListItemIcon>
+          <BarChartIcon />
+        </ListItemIcon>
+        <ListItemText primary="Reports" />
+      </ListItem>
+      <ListItem button>
+        <ListItemIcon>
+          <LayersIcon />
+        </ListItemIcon>
+        <ListItemText primary="Integrations" />
+      </ListItem>
+    </div>
+  );
+};
 
 export const secondaryListItems = (
   <div>
@@ -69,3 +82,7 @@ export const secondaryListItems = (
     </ListItem>
   </div>
 );
+
+MainListItems.propTypes = {
+  handleNewPayment: PropTypes.func,
+};
