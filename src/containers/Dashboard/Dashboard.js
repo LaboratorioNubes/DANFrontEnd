@@ -26,6 +26,7 @@ import Chart from "../../components/Chart/Chart";
 import Deposits from "../../components/Deposits/Deposits";
 import Orders from "../../components/Orders/Orders";
 import PaymentModal from "../../components/PaymentModal/PaymentModal";
+import OrderModal from "../../components/OrderModal/OrderModal";
 import { Modal } from "@material-ui/core";
 
 const drawerWidth = 240;
@@ -115,6 +116,7 @@ const Dashboard = () => {
   const [dashboard, setDashboard] = useState({
     open: true,
     paymentModal: false,
+    orderModal: false,
   });
   const handleDrawerOpen = () => {
     setDashboard({ ...dashboard, open: true });
@@ -129,6 +131,14 @@ const Dashboard = () => {
 
   const handlePaymentModalClose = () => {
     setDashboard({ ...dashboard, paymentModal: false });
+  }
+
+  const handleNewOrder = () => {
+    setDashboard({ ...dashboard, orderModal: true });
+  };
+
+  const handleOrderModalClose = () => {
+    setDashboard({ ...dashboard, orderModal: false });
   }
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
@@ -182,7 +192,7 @@ const Dashboard = () => {
           </IconButton>
         </div>
         <Divider />
-        <MainListItems handleNewPayment={handleNewPayment}/>
+        <MainListItems handleNewPayment={handleNewPayment} handleNewOrder={handleNewOrder}/>
         <Divider />
         <List>{secondaryListItems}</List>
       </Drawer>
@@ -214,6 +224,7 @@ const Dashboard = () => {
       </main>
       <Modal></Modal>
       <PaymentModal open={dashboard.paymentModal} handlePaymentModalClose={handlePaymentModalClose} />
+      <OrderModal open={dashboard.orderModal} handleOrderModalClose={handleOrderModalClose} />
     </div>
   );
 };

@@ -5,8 +5,6 @@ import Fade from "@material-ui/core/Fade";
 import PropTypes from "prop-types";
 import {
   TextField,
-  FormControlLabel,
-  Checkbox,
   Grid,
   Button,
   makeStyles,
@@ -21,6 +19,7 @@ import {
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 import CloseIcon from "@material-ui/icons/Close";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -39,28 +38,37 @@ const useStyles = makeStyles((theme) => ({
     position: "flex",
     right: theme.spacing(1),
     top: theme.spacing(1),
-    //color: theme.palette.grey[500],
   },
   modalHeader: {
     display: "flex",
     justifyContent: "space-between",
-  },
-  formControl: {
-    //margin: theme.spacing(1),
-    //minWidth: 200,
   },
 }));
 
 const PaymentModal = (props) => {
   const classes = useStyles();
   const { open } = props;
+  let dateC = new Date();
+
+  let day = dateC.getDate();
+  let month = dateC.getMonth() + 1;
+  let year = dateC.getFullYear();
+
+  let initialDate;
+
+  if (month < 10) {
+    initialDate = `${day}-0${month}-${year}`;
+  } else {
+    initialDate = `${day}-${month}-${year}`;
+  }
+
   const [paymentForm, setPaymentForm] = useState({
     method: "",
-    date: new Date(),
+    date: initialDate,
     value: null,
     billNum: "",
     checkNum: "",
-    checkDate: new Date(),
+    checkDate: initialDate,
     bank: "",
     transferCode: "",
     originCbu: "",
@@ -70,6 +78,23 @@ const PaymentModal = (props) => {
   /*const handleOpen = () => {
     setOpen(true);
   };*/
+  const setDate = (e) => {debugger;
+      let checkdate;
+
+      let dayC = e.getDate();
+      let monthC = e.getMonth() + 1;
+      let yearC = e.getFullYear();
+
+      if (monthC < 10) {
+        checkdate = `${dayC}-0${monthC}-${yearC}`;
+      } else {
+        checkdate = `${dayC}-${monthC}-${yearC}`;
+      }
+      setPaymentForm({
+        ...paymentForm,
+        checkDate: checkdate,
+      })
+  }; 
 
   const handleClose = () => {
     props.handlePaymentModalClose();
@@ -77,6 +102,54 @@ const PaymentModal = (props) => {
 
   const handleMethodChange = (e) => {
     setPaymentForm({ ...paymentForm, method: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    let payment;
+    if (paymentForm.method === "Check") {
+      payment = {
+        cliente: 1,
+        fechaPago: paymentForm.date,
+        efectivo: null,
+        transferencia: null,
+        cheque: {
+          nroCheque: paymentForm.checkNum,
+          fechaCorbo: paymentForm.checkDate,
+          banco: paymentForm.bank,
+        },
+      };
+    } else if (paymentForm.method === "Cash") {
+      payment = {
+        cliente: 1,
+        fechaPago: paymentForm.date,
+        efectivo: {
+          nroRecibo: paymentForm.billNum,
+        },
+        transferencia: null,
+        cheque: null,
+      };
+    } else if (paymentForm.method === "Transfer") {
+      payment = {
+        cliente: 1,
+        fechaPago: paymentForm.date,
+        efectivo: null,
+        transferencia: {
+          cbuOrigen: paymentForm.originCbu,
+          cbuDestino: paymentForm.destinationCbu,
+          codigoTransferencia: paymentForm.transferCode,
+        },
+        cheque: null,
+      };
+    }
+
+    axios
+      .post(`http://localhost:9003/api/pago`, { payment })
+      .then((res) => {
+        console.log(res);
+        console.log(res.data);
+      });
   };
 
   return (
@@ -109,12 +182,13 @@ const PaymentModal = (props) => {
             </div>
             <form className={classes.form} noValidate>
               <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={6}>
                   <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <KeyboardDatePicker
+                    disabled
                       disableToolbar
                       variant="inline"
-                      format="MM/dd/yyyy"
+                      format="dd/MM/yyyy"
                       id="date"
                       label="Date"
                       value={paymentForm.date}
@@ -130,11 +204,8 @@ const PaymentModal = (props) => {
                     />
                   </MuiPickersUtilsProvider>
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                  <FormControl
-                    variant="outlined"
-                    className={classes.formControl}
-                  >
+                <Grid item xs={6}>
+                  <FormControl variant="outlined">
                     <InputLabel htmlFor="outlined-method-native-simple">
                       Method
                     </InputLabel>
@@ -218,16 +289,11 @@ const PaymentModal = (props) => {
                         <KeyboardDatePicker
                           disableToolbar
                           variant="inline"
-                          format="MM/dd/yyyy"
+                          format="dd/MM/yyyy"
                           id="date-check"
                           label="Check Datee"
                           value={paymentForm.checkDate}
-                          onChange={(e) =>
-                            setPaymentForm({
-                              ...paymentForm,
-                              checkDate: e,
-                            })
-                          }
+                          onChange={setDate}
                           KeyboardButtonProps={{
                             "aria-label": "change date",
                           }}
@@ -236,7 +302,7 @@ const PaymentModal = (props) => {
                     </Grid>
                   </>
                 )}
-                 {paymentForm.method === "Transfer" && (
+                {paymentForm.method === "Transfer" && (
                   <>
                     <Grid item xs={12}>
                       <TextField
@@ -266,7 +332,6 @@ const PaymentModal = (props) => {
                         label="Origin Cbu"
                         name="originCbu"
                         autoComplete="Origin Cbu"
-                        type="number"
                         value={paymentForm.originCbu}
                         onChange={(e) =>
                           setPaymentForm({
@@ -277,7 +342,7 @@ const PaymentModal = (props) => {
                       />
                     </Grid>
                     <Grid item xs={6}>
-                    <TextField
+                      <TextField
                         variant="outlined"
                         required
                         fullWidth
@@ -285,7 +350,6 @@ const PaymentModal = (props) => {
                         label="Destination Cbu"
                         name="destinationCbu"
                         autoComplete="Destination Cbu"
-                        type="number"
                         value={paymentForm.destinationCbu}
                         onChange={(e) =>
                           setPaymentForm({
@@ -324,7 +388,7 @@ const PaymentModal = (props) => {
                 variant="contained"
                 color="primary"
                 className={classes.submit}
-                //onClick={validateForm}
+                onClick={handleSubmit}
               >
                 Submit
               </Button>

@@ -24,9 +24,7 @@ export const MainListItems = (props) => {
       <ListItem
         button
         name="newOrders"
-        /*onClick={(e, o) => {
-          console.log(e);
-        }}*/
+        onClick={props.handleNewOrder}
       >
         <ListItemIcon>
           <ShoppingCartIcon />
@@ -85,4 +83,5 @@ export const secondaryListItems = (
 
 MainListItems.propTypes = {
   handleNewPayment: PropTypes.func,
+  handleNewOrder: PropTypes.func,
 };

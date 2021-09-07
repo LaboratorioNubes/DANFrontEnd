@@ -1,0 +1,32 @@
+[
+  {
+    "id": 0,
+    "name": "Cement - unit",
+    "price": 799
+  },
+  {
+    "id": 1,
+    "name": "Sand - M3",
+    "price": 1588
+  },
+  {
+    "id": 2,
+    "name": "Metal Steel - Mt",
+    "price": 2199
+  },
+  {
+    "id": 3,
+    "name": "Bricks - unit",
+    "price": 15
+  },
+  {
+    "id": 4,
+    "name": "Hollow bricks - unit",
+    "price": 25
+  },
+  {
+    "id": 5,
+    "name": "Construccion rocks - M3",
+    "price": 4100
+  }
+]
