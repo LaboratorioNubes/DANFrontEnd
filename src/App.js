@@ -10,9 +10,7 @@ function App() {
     <Router>
       <div className="App">
         <header className="App-header">
-          <Route path="/signIn">
-            <SignIn />
-          </Route>  
+          <SignIn />
           <Route path="/signUp">
             <SignUp />
           </Route>

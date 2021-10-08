@@ -80,7 +80,7 @@ const SignUp = () => {
 
   let history = useHistory();
   const signInRedirect = () => {
-    history.push("/SignIn");
+    history.push("/");
   };
 
   const validateForm = () => {

@@ -122,13 +122,16 @@ const PaymentModal = (props) => {
       };
     } else if (paymentForm.method === "Cash") {
       payment = {
-        cliente: 1,
-        fechaPago: paymentForm.date,
-        efectivo: {
-          nroRecibo: paymentForm.billNum,
-        },
-        transferencia: null,
-        cheque: null,
+        "payment": {
+
+          cliente: 1,
+          fechaPago: paymentForm.date,
+          efectivo: {
+            nroRecibo: paymentForm.billNum,
+          },
+          transferencia: null,
+          cheque: null,
+        }
       };
     } else if (paymentForm.method === "Transfer") {
       payment = {
@@ -143,7 +146,7 @@ const PaymentModal = (props) => {
         cheque: null,
       };
     }
-
+    debugger;
     axios
       .post(`http://localhost:9003/api/pago`, { payment })
       .then((res) => {
