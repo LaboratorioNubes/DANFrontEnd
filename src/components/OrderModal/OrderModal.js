@@ -115,10 +115,10 @@ const OrderModal = (props) => {
     setOrderForm({ ...orderForm, construction: e.target.value });
   };
 
-  const handleItemProductChange = (e, index) => {
+  const handleItemProductChange = (e, index) => { debugger ; 
     let currentItems = orderForm.items;
     productsList.forEach((product) => {
-      if ((product.id = e.target.value)) {
+      if (product.id == e.target.value) {
         currentItems[index].product = product.name;
         currentItems[index].price = product.price;
       }
@@ -150,13 +150,13 @@ const OrderModal = (props) => {
     setOrderForm({ ...orderForm, items: currentItems });
   };
 
-  const DeleteItem = (e, index) => {debugger;
+  const DeleteItem = (item, index) => { 
     let currentItems = orderForm.items;
-    let newArray = currentItems.splice(index, 1);
-    let newTotal = orderForm.total - currentItems[index].amount;
+    let newTotal = orderForm.total -item.amount;
+    let deletedItem = currentItems.splice(index, 1);
     setOrderForm({
       ...orderForm,
-      items: currentItems.splice(index, 1),
+      items: currentItems,
       total: newTotal,
     });
   };
@@ -256,7 +256,7 @@ const OrderModal = (props) => {
                           <DeleteIcon
                             className={classes.deleteIcon}
                             onClick={(e) => {
-                              DeleteItem(e, index);
+                              DeleteItem(item, index);
                             }}
                           />
                         </Grid>
