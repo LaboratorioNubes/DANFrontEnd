@@ -6,9 +6,10 @@ import ListSubheader from "@material-ui/core/ListSubheader";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import AttachMoney from "@material-ui/icons/AttachMoney";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
-import PeopleIcon from "@material-ui/icons/People";
+//import PeopleIcon from "@material-ui/icons/People";
 import BarChartIcon from "@material-ui/icons/BarChart";
-import LayersIcon from "@material-ui/icons/Layers";
+//import LayersIcon from "@material-ui/icons/Layers";
+import HomeWorkIcon from '@mui/icons-material/HomeWork';
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import PropTypes from "prop-types";
 
@@ -21,31 +22,27 @@ export const MainListItems = (props) => {
         </ListItemIcon>
         <ListItemText primary="Dashboard" />
       </ListItem>
-      <ListItem
-        button
-        name="newOrders"
-        onClick={props.handleNewOrder}
-      >
+      <ListItem button name="newOrders" onClick={props.handleNewOrder}>
         <ListItemIcon>
           <ShoppingCartIcon />
         </ListItemIcon>
         <ListItemText primary="New Orders" />
       </ListItem>
-      <ListItem
-        button
-        name="newPayment"
-        onClick={props.handleNewPayment}
-      >
+      <ListItem button name="newPayment" onClick={props.handleNewPayment}>
         <ListItemIcon>
           <AttachMoney />
         </ListItemIcon>
         <ListItemText primary="New Payment" />
       </ListItem>
-      <ListItem button>
+      <ListItem
+        button
+        name="newBuildingSite"
+        onClick={props.handleNewBuildingSite}
+      >
         <ListItemIcon>
-          <LayersIcon />
+          <HomeWorkIcon />
         </ListItemIcon>
-        <ListItemText primary="Integrations" />
+        <ListItemText primary="New Building Site" />
       </ListItem>
       <ListItem button>
         <ListItemIcon>
@@ -84,4 +81,5 @@ export const secondaryListItems = (
 MainListItems.propTypes = {
   handleNewPayment: PropTypes.func,
   handleNewOrder: PropTypes.func,
+  handleNewBuildingSite: PropTypes.func,
 };

@@ -3,7 +3,6 @@ import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import PropTypes from "prop-types";
-import productsList from "./products.json";
 import DeleteIcon from "@material-ui/icons/Delete";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import {
@@ -84,7 +83,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const OrderModal = (props) => {
+const BuildingModal = (props) => {
   const classes = useStyles();
 
   const { open } = props;
@@ -93,6 +92,7 @@ const OrderModal = (props) => {
     date: new Date(),
     items: [
       {
+        id: 0,
         quantity: 0,
         product: "",
         amount: 0,
@@ -107,14 +107,14 @@ const OrderModal = (props) => {
   };*/
 
   const handleClose = () => {
-    props.handleOrderModalClose();
+    props.handleBuildingSiteModalClose();
   };
 
   const handleContructionChange = (e) => {
     setOrderForm({ ...orderForm, construction: e.target.value });
   };
 
-  const handleItemProductChange = (e, index) => { debugger ; 
+ /*  const handleItemProductChange = (e, index) => { debugger ; 
     let currentItems = orderForm.items;
     productsList.forEach((product) => {
       if (product.id == e.target.value) {
@@ -123,7 +123,7 @@ const OrderModal = (props) => {
       }
     });
     setOrderForm({ ...orderForm, items: currentItems });
-  };
+  }; */
 
   const handleItemQuantityChange = (e, index) => {
     let currentItems = orderForm.items;
@@ -184,7 +184,7 @@ const OrderModal = (props) => {
         <Fade in={open}>
           <div className={classes.paper}>
             <div className={classes.modalHeader}>
-              <h2 id="transition-modal-title">Order</h2>
+              <h2 id="transition-modal-title">Building Site</h2>
               <div>
                 <IconButton
                   aria-label="close"
@@ -197,14 +197,6 @@ const OrderModal = (props) => {
             </div>
             <form className={classes.form} noValidate>
               <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <h3
-                    id="transition-modal-section"
-                    className={classes.sectionTitle}
-                  >
-                    Destination
-                  </h3>
-                </Grid>
                 <Grid item xs={12}>
                   <FormControl
                     variant="outlined"
@@ -270,7 +262,7 @@ const OrderModal = (props) => {
                             >
                               Product
                             </InputLabel>
-                            <Select
+                            {/* <Select
                               className={classes.itemHeight}
                               //labelWidth=""
                               autoWidth
@@ -295,7 +287,7 @@ const OrderModal = (props) => {
                                     </option>
                                   );
                                 })}
-                            </Select>
+                            </Select> */}
                           </FormControl>
                         </Grid>
                         <Grid item xs={6} sm={2}>
@@ -392,9 +384,9 @@ const OrderModal = (props) => {
   );
 };
 
-OrderModal.propTypes = {
+BuildingModal.propTypes = {
   open: PropTypes.bool,
-  handleOrderModalClose: PropTypes.func,
+  handleBuildingSiteModalClose: PropTypes.func,
 };
 
-export default OrderModal;
+export default BuildingModal;

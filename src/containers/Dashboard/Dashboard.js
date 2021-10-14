@@ -27,7 +27,9 @@ import Deposits from "../../components/Deposits/Deposits";
 import Orders from "../../components/Orders/Orders";
 import PaymentModal from "../../components/PaymentModal/PaymentModal";
 import OrderModal from "../../components/OrderModal/OrderModal";
+import BuildingModal from "../../components/BuildingModal/BuildingModal";
 import { Modal } from "@material-ui/core";
+import buildings from '../../images/green-building-1.jpg';
 
 const drawerWidth = 240;
 
@@ -107,8 +109,12 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
   },
   fixedHeight: {
-    height: 240,
-  },
+    height: 180,
+  },  
+  imageBck: {
+    backgroundImage: `url(${buildings})`,
+    backgroundSize: "cover",
+  }
 }));
 
 const Dashboard = () => {
@@ -117,6 +123,7 @@ const Dashboard = () => {
     open: true,
     paymentModal: false,
     orderModal: false,
+    buildingModal: false,
   });
   const handleDrawerOpen = () => {
     setDashboard({ ...dashboard, open: true });
@@ -140,7 +147,17 @@ const Dashboard = () => {
   const handleOrderModalClose = () => {
     setDashboard({ ...dashboard, orderModal: false });
   }
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+
+  const handleNewBuildingSite = () => {
+    setDashboard({ ...dashboard, buildingModal: true });
+  };
+
+  const handleBuildingSiteModalClose = () => {
+    setDashboard({ ...dashboard, buildingModal: false });
+  }
+  
+  const fixedHeightPaperWelcome = clsx(classes.paper, classes.fixedHeight, classes.imageBck);
+  const fixedHeightPaperPayment = clsx(classes.paper, classes.fixedHeight);
 
   return (
     <div className={classes.root}>
@@ -184,7 +201,6 @@ const Dashboard = () => {
           paper: clsx(classes.drawerPaper, !dashboard.open && classes.drawerPaperClose),
         }}
         open={dashboard.open}
-        onClick={console.log("entro poder")}
       >
         <div className={classes.toolbarIcon}>
           <IconButton onClick={handleDrawerClose}>
@@ -192,7 +208,7 @@ const Dashboard = () => {
           </IconButton>
         </div>
         <Divider />
-        <MainListItems handleNewPayment={handleNewPayment} handleNewOrder={handleNewOrder}/>
+        <MainListItems handleNewPayment={handleNewPayment} handleNewOrder={handleNewOrder} handleNewBuildingSite={handleNewBuildingSite}/>
         <Divider />
         <List>{secondaryListItems}</List>
       </Drawer>
@@ -202,13 +218,13 @@ const Dashboard = () => {
           <Grid container spacing={3}>
             {/* Chart */}
             <Grid item xs={12} md={8} lg={9}>
-              <Paper className={fixedHeightPaper}>
+              <Paper className={fixedHeightPaperWelcome}>
                 <Chart />
               </Paper>
             </Grid>
             {/* Recent Deposits */}
             <Grid item xs={12} md={4} lg={3}>
-              <Paper className={fixedHeightPaper}>
+              <Paper className={fixedHeightPaperPayment}>
                 <Deposits />
               </Paper>
             </Grid>
@@ -225,6 +241,8 @@ const Dashboard = () => {
       <Modal></Modal>
       <PaymentModal open={dashboard.paymentModal} handlePaymentModalClose={handlePaymentModalClose} />
       <OrderModal open={dashboard.orderModal} handleOrderModalClose={handleOrderModalClose} />
+      <BuildingModal open={dashboard.buildingModal} handleBuildingSiteModalClose={handleBuildingSiteModalClose}/>
+
     </div>
   );
 };
