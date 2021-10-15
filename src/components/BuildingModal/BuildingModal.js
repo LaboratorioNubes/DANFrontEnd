@@ -1,43 +1,31 @@
 import { React, useState } from "react";
 import Modal from "@material-ui/core/Modal";
+import { TextareaAutosize } from "@material-ui/core";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import PropTypes from "prop-types";
-import DeleteIcon from "@material-ui/icons/Delete";
-import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import {
   TextField,
   Grid,
   Button,
   makeStyles,
-  Select,
-  FormControl,
-  InputLabel,
   IconButton,
 } from "@material-ui/core";
-import DateFnsUtils from "@date-io/date-fns";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from "@material-ui/pickers";
 import CloseIcon from "@material-ui/icons/Close";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
-  modalOrder: {
+  modal: {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    "& div": {
-      //overflow: "scroll",
-    },
-    overflow: "scroll",
   },
   paper: {
     backgroundColor: theme.palette.background.paper,
     border: "2px solid #000",
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
-    maxWidth: "60rem",
+    maxWidth: "40rem",
   },
   closeButton: {
     position: "flex",
@@ -48,38 +36,13 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "space-between",
   },
-  constructionSelect: {
-    display: "flex",
-    flexDirection: "column",
-  },
   sectionTitle: {
-    marginBottom: "0",
     display: "flex",
   },
-  itemHeight: {
-    height: "2.5rem",
-  },
-  itemTextFieldHeight: {
-    "& input": {
-      height: "0.2rem!important",
-    },
-  },
-  productsSelect: {
+  sectionTitle2: {
     display: "flex",
-    flexDirection: "column",
-  },
-  addIcon: {
-    marginLeft: "0.5rem",
-    cursor: "pointer",
-  },
-  deleteIconGrid: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "flex-end",
-  },
-  deleteIcon: {
-    cursor: "pointer",
-    height: "2.5rem",
+    marginTop: "1rem",
+    marginBottom: "0"
   },
 }));
 
@@ -87,84 +50,30 @@ const BuildingModal = (props) => {
   const classes = useStyles();
 
   const { open } = props;
-  const [orderForm, setOrderForm] = useState({
-    construction: "",
-    date: new Date(),
-    items: [
-      {
-        id: 0,
-        quantity: 0,
-        product: "",
-        amount: 0,
-        price: 0,
-      },
-    ],
-    total: 0,
+  const [buildingForm, setBuildingForm] = useState({
+    name: "",
+    address: "",
+    phone: "",
+    description: "",
   });
-
-  /*const handleOpen = () => {
-    setOpen(true);
-  };*/
 
   const handleClose = () => {
     props.handleBuildingSiteModalClose();
   };
 
-  const handleContructionChange = (e) => {
-    setOrderForm({ ...orderForm, construction: e.target.value });
-  };
-
- /*  const handleItemProductChange = (e, index) => { debugger ; 
-    let currentItems = orderForm.items;
-    productsList.forEach((product) => {
-      if (product.id == e.target.value) {
-        currentItems[index].product = product.name;
-        currentItems[index].price = product.price;
-      }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let building = {
+      cliente: 1,
+      nombre: buildingForm.name,
+      direccion: buildingForm.address,
+      telefono: buildingForm.phone,
+      descripcion: buildingForm.description,
+    };
+    axios.post(`http://localhost:9003/api/obra`, building).then((res) => {
+      console.log(res);
+      console.log(res.data);
     });
-    setOrderForm({ ...orderForm, items: currentItems });
-  }; */
-
-  const handleItemQuantityChange = (e, index) => {
-    let currentItems = orderForm.items;
-    //let currentTotal = orderForm.total;
-    currentItems[index].quantity = e.target.value;
-    let newTotal = orderForm.total - currentItems[index].amount;
-    currentItems[index].amount = e.target.value * currentItems[index].price;
-    newTotal = newTotal + currentItems[index].amount;
-    /*  let currentTotal = orderForm.total;
-    currentTotal = currentTotal - orderForm[index].amount;
-    currentTotal = currentTotal + e.target.value; */
-    setOrderForm({ ...orderForm, items: currentItems, total: newTotal });
-  };
-
-  const AddItem = () => {
-    let currentItems = orderForm.items;
-    currentItems.push({
-      quantity: 0,
-      product: "",
-      amount: 0,
-      price: 0,
-    });
-    setOrderForm({ ...orderForm, items: currentItems });
-  };
-
-  const DeleteItem = (item, index) => { 
-    let currentItems = orderForm.items;
-    let newTotal = orderForm.total -item.amount;
-    let deletedItem = currentItems.splice(index, 1);
-    setOrderForm({
-      ...orderForm,
-      items: currentItems,
-      total: newTotal,
-    });
-  };
-
-  const handleAmountChange = (e, index) => {
-    let currentTotal = orderForm.total;
-    currentTotal = currentTotal - orderForm[index].amount;
-    currentTotal = currentTotal + e.target.value;
-    setOrderForm({ ...orderForm, total: currentTotal });
   };
 
   return (
@@ -172,7 +81,7 @@ const BuildingModal = (props) => {
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
-        className={classes.modalOrder}
+        className={classes.modal}
         open={open}
         //onClose={handleClose}
         closeAfterTransition
@@ -196,171 +105,94 @@ const BuildingModal = (props) => {
               </div>
             </div>
             <form className={classes.form} noValidate>
+              <Grid item xs={12}>
+                <h3
+                  id="transition-modal-section"
+                  className={classes.sectionTitle}
+                >
+                  Basic Info
+                </h3>
+              </Grid>
               <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <FormControl
+                <Grid item xs={6}>
+                  <TextField
                     variant="outlined"
-                    className={classes.constructionSelect}
-                  >
-                    <InputLabel htmlFor="outlined-method-native-simple">
-                      Building/Construction
-                    </InputLabel>
-                    <Select
-                      //className={classes.itemHeight}
-                      native
-                      required
-                      value={orderForm.construction}
-                      onChange={handleContructionChange}
-                      label="Building/Construction"
-                      inputProps={{
-                        name: "construction",
-                        id: "outlined-construction-native-simple",
-                      }}
-                    >
-                      <option aria-label="None" value="" />
-                      <option value={"example"}>MyConstruction</option>
-                    </Select>
-                  </FormControl>
+                    required
+                    fullWidth
+                    id="buildingName"
+                    label="Name"
+                    name="buildingName"
+                    autoComplete="Name"
+                    value={buildingForm.name}
+                    onChange={(e) =>
+                      setBuildingForm({
+                        ...buildingForm,
+                        name: e.target.value,
+                      })
+                    }
+                  />
                 </Grid>
-                <Grid item xs={12}>
-                  <h3
-                    id="transition-modal-section"
-                    className={classes.sectionTitle}
-                  >
-                    Items
-                    <AddCircleOutlineIcon
-                      className={classes.addIcon}
-                      onClick={AddItem}
-                    />
-                  </h3>
-                </Grid>
-                {orderForm.items &&
-                  orderForm.items.map((item, index) => {
-                    return (
-                      <>
-                        <Grid
-                          item
-                          xs={6}
-                          sm={1}
-                          className={classes.deleteIconGrid}
-                        >
-                          <DeleteIcon
-                            className={classes.deleteIcon}
-                            onClick={(e) => {
-                              DeleteItem(item, index);
-                            }}
-                          />
-                        </Grid>
-                        <Grid item xs={6} sm={5}>
-                          <FormControl
-                            variant="outlined"
-                            className={classes.productsSelect}
-                          >
-                            <InputLabel
-                              htmlFor="outlined-construction-native-simple"
-                              className={classes.productsSelectLabel}
-                            >
-                              Product
-                            </InputLabel>
-                            {/* <Select
-                              className={classes.itemHeight}
-                              //labelWidth=""
-                              autoWidth
-                              native
-                              required
-                              value={item.name}
-                              onChange={(e) => {
-                                handleItemProductChange(e, index);
-                              }}
-                              label="Product"
-                              inputProps={{
-                                name: "product",
-                                id: "outlined-construction-native-simple",
-                              }}
-                            >
-                              <option aria-label="None" value="" />
-                              {productsList &&
-                                productsList.map((product) => {
-                                  return (
-                                    <option key={product.id} value={product.id}>
-                                      {product.name}
-                                    </option>
-                                  );
-                                })}
-                            </Select> */}
-                          </FormControl>
-                        </Grid>
-                        <Grid item xs={6} sm={2}>
-                          <TextField
-                            className={classes.itemTextFieldHeight}
-                            variant="outlined"
-                            InputProps={{ inputProps: { min: 0 } }}
-                            disabled={item.product !== "" ? false : true}
-                            required
-                            fullWidth
-                            name="quantity"
-                            label="Quantity"
-                            type="number"
-                            id="quantity"
-                            //autoComplete="current-value"
-                            value={item.quantity}
-                            onChange={(e) => {
-                              handleItemQuantityChange(e, index);
-                            }}
-                          />
-                        </Grid>
-                        <Grid item xs={6} sm={2}>
-                          <TextField
-                            className={classes.itemTextFieldHeight}
-                            variant="outlined"
-                            disabled
-                            fullWidth
-                            name="price"
-                            label="$ Price"
-                            type="number"
-                            id="price"
-                            //autoComplete="current-value"
-                            value={item.price}
-                          />
-                        </Grid>
-                        <Grid item xs={6} sm={2}>
-                          <TextField
-                            className={classes.itemTextFieldHeight}
-                            variant="outlined"
-                            disabled
-                            fullWidth
-                            name="amount"
-                            label="$ Amount"
-                            type="number"
-                            id="amount"
-                            //autoComplete="current-value"
-                            value={item.amount}
-                            //onChange={handleAmountChange}
-                          />
-                        </Grid>
-                      </>
-                    );
-                  })}
-                <Grid item xs={12}>
-                  <h3
-                    id="transition-modal-section"
-                    className={classes.sectionTitle}
-                  >
-                    Total
-                  </h3>
+                <Grid item xs={6}>
+                  <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    id="buildingPhone"
+                    label="Contact Phone"
+                    name="buildingPhone"
+                    autoComplete="phone"
+                    value={buildingForm.phone}
+                    onChange={(e) =>
+                      setBuildingForm({
+                        ...buildingForm,
+                        phone: e.target.value,
+                      })
+                    }
+                  />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
-                    className={classes.itemTextFieldHeight}
                     variant="outlined"
-                    disabled
+                    required
                     fullWidth
-                    name="total"
-                    label="$"
-                    type="number"
-                    id="total"
-                    //autoComplete="current-value"
-                    value={orderForm.total}
+                    id="buildingAddress"
+                    label="Address"
+                    name="buildingAddress"
+                    autoComplete="address"
+                    value={buildingForm.address}
+                    onChange={(e) =>
+                      setBuildingForm({
+                        ...buildingForm,
+                        address: e.target.value,
+                      })
+                    }
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                <h3
+                  id="transition-modal-section"
+                  className={classes.sectionTitle2}
+                >
+                  Description
+                </h3>
+              </Grid>
+                <Grid item xs={12}>
+                  <TextareaAutosize
+                    aria-label="minimum height"
+                    minRows={5}
+                    style={{
+                      display: "block",
+                      width: "100%",
+                      overflow: "hidden",
+                      resize: "both",
+                    }}
+                    value={buildingForm.description}
+                    onChange={(e) =>
+                      setBuildingForm({
+                        ...buildingForm,
+                        description: e.target.value,
+                      })
+                    }
                   />
                 </Grid>
                 <Grid item xs={12}></Grid>
@@ -371,9 +203,9 @@ const BuildingModal = (props) => {
                 variant="contained"
                 color="primary"
                 className={classes.submit}
-                //onClick={validateForm}
+                onClick={handleSubmit}
               >
-                Shop
+                Submit
               </Button>
               <Grid container justifyContent="flex-end"></Grid>
             </form>
