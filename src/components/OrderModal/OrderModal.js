@@ -167,6 +167,31 @@ const OrderModal = (props) => {
     setOrderForm({ ...orderForm, total: currentTotal });
   };
 
+  const handleSaveOrder = (e) => {
+    e.preventDefault();
+    let detalles = [];
+    orderForm.items.forEach((item) => {
+      detalles.push({
+        cantidad: item.quantity,
+        producto: item.product,
+        monto: item.amount,
+        precio: item.precio,
+      })
+    });
+
+    let order = {
+      cliente: 1,
+      obra: orderForm.construction,
+      fechaPedido: orderForm.date,
+      items: detalles,
+      total: orderForm.total,
+    };
+    axios.post(`http://localhost:9003/api/pedido`, order).then((res) => {
+      console.log(res);
+      console.log(res.data);
+    });
+  };
+
   return (
     <div>
       <Modal
@@ -379,7 +404,7 @@ const OrderModal = (props) => {
                 variant="contained"
                 color="primary"
                 className={classes.submit}
-                //onClick={validateForm}
+                onClick={handleSaveOrder}
               >
                 Shop
               </Button>

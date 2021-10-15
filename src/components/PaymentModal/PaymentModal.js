@@ -78,23 +78,24 @@ const PaymentModal = (props) => {
   /*const handleOpen = () => {
     setOpen(true);
   };*/
-  const setDate = (e) => {debugger;
-      let checkdate;
+  const setDate = (e) => {
+    debugger;
+    let checkdate;
 
-      let dayC = e.getDate();
-      let monthC = e.getMonth() + 1;
-      let yearC = e.getFullYear();
+    let dayC = e.getDate();
+    let monthC = e.getMonth() + 1;
+    let yearC = e.getFullYear();
 
-      if (monthC < 10) {
-        checkdate = `${dayC}-0${monthC}-${yearC}`;
-      } else {
-        checkdate = `${dayC}-${monthC}-${yearC}`;
-      }
-      setPaymentForm({
-        ...paymentForm,
-        checkDate: checkdate,
-      })
-  }; 
+    if (monthC < 10) {
+      checkdate = `${dayC}-0${monthC}-${yearC}`;
+    } else {
+      checkdate = `${dayC}-${monthC}-${yearC}`;
+    }
+    setPaymentForm({
+      ...paymentForm,
+      checkDate: checkdate,
+    });
+  };
 
   const handleClose = () => {
     props.handlePaymentModalClose();
@@ -116,14 +117,13 @@ const PaymentModal = (props) => {
         transferencia: null,
         cheque: {
           nroCheque: paymentForm.checkNum,
-          fechaCorbo: paymentForm.checkDate,
+          fechaCobro: paymentForm.checkDate,
           banco: paymentForm.bank,
         },
       };
     } else if (paymentForm.method === "Cash") {
       payment = {
-        "payment": {
-
+        payment: {
           cliente: 1,
           fechaPago: paymentForm.date,
           efectivo: {
@@ -131,7 +131,7 @@ const PaymentModal = (props) => {
           },
           transferencia: null,
           cheque: null,
-        }
+        },
       };
     } else if (paymentForm.method === "Transfer") {
       payment = {
@@ -146,13 +146,10 @@ const PaymentModal = (props) => {
         cheque: null,
       };
     }
-    debugger;
-    axios
-      .post(`http://localhost:9003/api/pago`, { payment })
-      .then((res) => {
-        console.log(res);
-        console.log(res.data);
-      });
+    axios.post(`http://localhost:9003/api/pago`, payment).then((res) => {
+      console.log(res);
+      console.log(res.data);
+    });
   };
 
   return (
@@ -188,13 +185,15 @@ const PaymentModal = (props) => {
                 <Grid item xs={6}>
                   <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <KeyboardDatePicker
-                    disabled
+                      disabled
                       disableToolbar
                       variant="inline"
                       format="dd/MM/yyyy"
                       id="date"
                       label="Date"
-                      value={paymentForm.date}
+                      helperText=""
+                      error={false}
+                      inputValue={paymentForm.date}
                       onChange={(e) =>
                         setPaymentForm({
                           ...paymentForm,
@@ -295,7 +294,9 @@ const PaymentModal = (props) => {
                           format="dd/MM/yyyy"
                           id="date-check"
                           label="Check Datee"
-                          value={paymentForm.checkDate}
+                          helperText=""
+                          error={false}
+                          inputValue={paymentForm.date}
                           onChange={setDate}
                           KeyboardButtonProps={{
                             "aria-label": "change date",
