@@ -187,7 +187,7 @@ const OrderModal = (props) => {
       items: detalles,
       total: orderForm.total,
     };
-    axios.post(`http://localhost:9003/api/pedido`, order).then((res) => {
+    axios.post(`http://localhost:9002/api/pedido`, order).then((res) => {
       console.log(res);
       console.log(res.data);
     });

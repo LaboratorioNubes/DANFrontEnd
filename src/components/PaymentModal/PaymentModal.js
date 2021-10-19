@@ -106,6 +106,13 @@ const PaymentModal = (props) => {
   };
 
   const handleSubmit = (e) => {
+    let axiosConfig = {
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        "Access-Control-Allow-Origin": "*",
+      }
+    };
+
     e.preventDefault();
 
     let payment;
@@ -123,7 +130,6 @@ const PaymentModal = (props) => {
       };
     } else if (paymentForm.method === "Cash") {
       payment = {
-        payment: {
           cliente: 1,
           fechaPago: paymentForm.date,
           efectivo: {
@@ -131,7 +137,6 @@ const PaymentModal = (props) => {
           },
           transferencia: null,
           cheque: null,
-        },
       };
     } else if (paymentForm.method === "Transfer") {
       payment = {
@@ -146,9 +151,13 @@ const PaymentModal = (props) => {
         cheque: null,
       };
     }
-    axios.post(`http://localhost:9003/api/pago`, payment).then((res) => {
+    console.log(payment);
+    axios.post(`http://localhost:9003/api/pago`, payment, axiosConfig).then((res) => {
       console.log(res);
       console.log(res.data);
+    }).catch(function (error) {
+      // handle error
+      console.log(error);
     });
   };
 
