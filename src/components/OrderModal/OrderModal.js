@@ -87,9 +87,7 @@ const OrderModal = (props) => {
   useEffect(() => {
     console.log("LLama obrass");
     axios
-      .get(`http://localhost:9003/api/pedido`, {
-        params: { cliente: 1 },
-      })
+      .get(`http://localhost:9005/api/obra/obras/1`)
       .then((resp) => {
         console.log(resp.data);
       });
