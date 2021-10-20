@@ -90,6 +90,7 @@ const OrderModal = (props) => {
       .get(`http://localhost:9005/api/obra/obras/1`)
       .then((resp) => {
         console.log(resp.data);
+        this.props.microserviceActions.setBuildings(resp.data);
       });
   });
 
