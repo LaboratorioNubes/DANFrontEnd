@@ -188,7 +188,7 @@ const OrderModal = (props) => {
         producto: item.product,
         monto: item.amount,
         precio: item.price,
-      })
+      });
     });
 
     let order = {
@@ -263,7 +263,11 @@ const OrderModal = (props) => {
                         id: "outlined-construction-native-simple",
                       }}
                     >
-                      <option aria-label="None" value="" />
+                      <option aria-label="None" value="" />{" "}
+                      {this.props.buildings &&
+                        this.props.buildings.map((b) => (
+                          <option value={b}>b</option>
+                        ))}
                       <option value={"example"}>MyConstruction</option>
                     </Select>
                   </FormControl>
@@ -439,6 +443,7 @@ OrderModal.propTypes = {
 const mapStateToProps = (state) => {
   return {
     orders: state.orders,
+    buildings: state.buildings,
   };
 };
 
