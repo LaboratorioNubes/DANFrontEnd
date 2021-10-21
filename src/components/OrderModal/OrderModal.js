@@ -124,7 +124,6 @@ const OrderModal = (props) => {
   };
 
   const handleItemProductChange = (e, index) => {
-    debugger;
     let currentItems = orderForm.items;
     productsList.forEach((product) => {
       if (product.id == e.target.value) {
