@@ -84,15 +84,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const OrderModal = (props) => {
-  useEffect(() => {
-    console.log("LLama obrass");
-    axios
-      .get(`http://localhost:9005/api/obra/obras/1`)
-      .then((resp) => {
-        console.log(resp.data);
-        props.microserviceActions.setBuildings(resp.data);
-      });
-  });
+  // useEffect(() => {
+  //   console.log("LLama obrass");
+  //   axios
+  //     .get(`http://localhost:9005/api/obra/obras/1`)
+  //     .then((resp) => {
+  //       console.log(resp.data);
+  //       props.microserviceActions.setBuildings(resp.data);
+  //     });
+  // });
 
   const classes = useStyles();
 

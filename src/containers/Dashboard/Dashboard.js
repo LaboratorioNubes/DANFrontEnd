@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import {React, useEffect, useState} from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -30,6 +30,12 @@ import OrderModal from "../../components/OrderModal/OrderModal";
 import BuildingModal from "../../components/BuildingModal/BuildingModal";
 import { Modal } from "@material-ui/core";
 import buildings from '../../images/green-building-1.jpg';
+import axios from "axios";
+import * as microserviceActions from "../../actions/microserviceActions";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import PropTypes from "prop-types";
+
 
 const drawerWidth = 240;
 
@@ -117,7 +123,17 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Dashboard = () => {
+const Dashboard = (props) => {
+  useEffect(() => {
+    console.log("LLama obrass");
+    axios
+        .get(`http://localhost:9005/api/obra/obras/1`)
+        .then((resp) => {
+          console.log(resp.data);
+          props.microserviceActions.setBuildings(resp.data);
+        });
+  });
+
   const classes = useStyles();
   const [dashboard, setDashboard] = useState({
     open: true,
@@ -247,4 +263,14 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+Dashboard.propTypes = {
+  microserviceActions: PropTypes.object,
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    microserviceActions: bindActionCreators(microserviceActions, dispatch),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(Dashboard);
