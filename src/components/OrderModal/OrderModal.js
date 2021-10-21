@@ -200,6 +200,7 @@ const OrderModal = (props) => {
       console.log(res);
       console.log(res.data);
     });
+    handleClose();
   };
 
   return (
