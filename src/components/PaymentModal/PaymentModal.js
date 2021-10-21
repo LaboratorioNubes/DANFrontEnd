@@ -65,7 +65,7 @@ const PaymentModal = (props) => {
   const [paymentForm, setPaymentForm] = useState({
     method: "",
     date: initialDate,
-    value: null,
+    value: 0.0,
     billNum: "",
     checkNum: "",
     checkDate: initialDate,
@@ -120,6 +120,7 @@ const PaymentModal = (props) => {
       payment = {
         cliente: 1,
         fechaPago: paymentForm.date,
+        monto: paymentForm.value,
         efectivo: null,
         transferencia: null,
         cheque: {
@@ -132,6 +133,7 @@ const PaymentModal = (props) => {
       payment = {
           cliente: 1,
           fechaPago: paymentForm.date,
+          monto: paymentForm.value,
           efectivo: {
             nroRecibo: paymentForm.billNum,
           },
@@ -142,6 +144,7 @@ const PaymentModal = (props) => {
       payment = {
         cliente: 1,
         fechaPago: paymentForm.date,
+        monto: paymentForm.value,
         efectivo: null,
         transferencia: {
           cbuOrigen: paymentForm.originCbu,
