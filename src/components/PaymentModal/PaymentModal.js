@@ -22,6 +22,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import axios from "axios";
 import { bindActionCreators } from "redux";
 import * as microserviceActions from "../../actions/microserviceActions";
+import { connect } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
