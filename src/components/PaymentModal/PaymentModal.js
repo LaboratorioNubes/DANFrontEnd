@@ -173,6 +173,7 @@ const PaymentModal = (props) => {
       // handle error
       console.log(error);
     });
+    handleClose();
   };
 
   return (
