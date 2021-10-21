@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
@@ -16,13 +16,11 @@ import {
   InputLabel,
   IconButton,
 } from "@material-ui/core";
-import DateFnsUtils from "@date-io/date-fns";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from "@material-ui/pickers";
 import CloseIcon from "@material-ui/icons/Close";
 import axios from "axios";
+import * as microserviceActions from "../../actions/microserviceActions";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 
 const useStyles = makeStyles((theme) => ({
   modalOrder: {
@@ -86,6 +84,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const OrderModal = (props) => {
+  useEffect(() => {
+    console.log("LLama obrass");
+    axios
+      .get(`http://localhost:9003/api/pedido`, {
+        params: { cliente: 1 },
+      })
+      .then((resp) => {
+        console.log(resp.data);
+      });
+  });
+
   const classes = useStyles();
 
   const { open } = props;
@@ -115,7 +124,8 @@ const OrderModal = (props) => {
     setOrderForm({ ...orderForm, construction: e.target.value });
   };
 
-  const handleItemProductChange = (e, index) => { debugger ; 
+  const handleItemProductChange = (e, index) => {
+    debugger;
     let currentItems = orderForm.items;
     productsList.forEach((product) => {
       if (product.id == e.target.value) {
@@ -150,9 +160,9 @@ const OrderModal = (props) => {
     setOrderForm({ ...orderForm, items: currentItems });
   };
 
-  const DeleteItem = (item, index) => { 
+  const DeleteItem = (item, index) => {
     let currentItems = orderForm.items;
-    let newTotal = orderForm.total -item.amount;
+    let newTotal = orderForm.total - item.amount;
     let deletedItem = currentItems.splice(index, 1);
     setOrderForm({
       ...orderForm,
@@ -176,8 +186,8 @@ const OrderModal = (props) => {
         cantidad: item.quantity,
         producto: item.product,
         monto: item.amount,
-        precio: item.precio,
-      })
+        precio: item.price,
+      });
     });
 
     let order = {
@@ -421,6 +431,19 @@ const OrderModal = (props) => {
 OrderModal.propTypes = {
   open: PropTypes.bool,
   handleOrderModalClose: PropTypes.func,
+  microserviceActions: PropTypes.object,
 };
 
-export default OrderModal;
+const mapStateToProps = (state) => {
+  return {
+    orders: state.orders,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    microserviceActions: bindActionCreators(microserviceActions, dispatch),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(OrderModal);
