@@ -92,6 +92,7 @@ const OrderModal = (props) => {
       })
       .then((resp) => {
         console.log(resp.data);
+        this.props.microserviceActions.setBuildings(resp.data);
       });
   });
 
