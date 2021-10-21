@@ -23,11 +23,11 @@ const Deposits = (props) => {
   const classes = useStyles();
   useEffect(() => {
     axios
-      .get(`http://localhost:9005/api/pago/1`)
+      .get(`http://localhost:9003/api/pago/cliente/1`)
       .then((resp) => {
         console.log(resp.data);
         props.microserviceActions.setPayments(resp.data);
-      });
+      }).catch(error => console.log(error));
   });
   
   return (
