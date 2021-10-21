@@ -262,11 +262,10 @@ const OrderModal = (props) => {
                       }}
                     >
                       <option aria-label="None" value="" />{" "}
-                      {this.props.buildings &&
-                        this.props.buildings.map((b) => (
-                          <option value={b}>b</option>
+                      {props.buildings.buildings &&
+                        props.buildings.buildings.map((b) => (
+                          <option value={b}>{b}</option>
                         ))}
-                      <option value={"example"}>MyConstruction</option>
                     </Select>
                   </FormControl>
                 </Grid>
