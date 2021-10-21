@@ -19,15 +19,20 @@ const useStyles = makeStyles({
 
 const Deposits = (props) => {
   const classes = useStyles();
+    let date = new Date();
+  if (props.payments && props.payments.length > 0) {
+      date =  new Date(props.payments[props.payments.length-1].fechaPago);
+  }
+
   
   return (
     <>
       <Title>Recent Payments</Title>
       <Typography component="p" variant="h4">
-        ${props.payments && props.payments.length > 0 ? props.payments[0].monto : 0}
+        ${props.payments && props.payments.length > 0 ? props.payments[props.payments.length-1].monto : 0}
       </Typography>
       <Typography color="textSecondary" className={classes.depositContext}>
-      {props.payments && props.payments.length > 0 ? props.payments[0].fechaPago : "on 15 October, 2021"}
+      {props.payments && props.payments.length > 0 ? props.payments[props.payments.length-1].fechaPago.substr(0,10) : "No date available"}
       </Typography>
       <div>
         <Link color="primary" href="#" onClick={preventDefault}>

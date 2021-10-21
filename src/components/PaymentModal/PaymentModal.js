@@ -84,6 +84,7 @@ const PaymentModal = (props) => {
     transferCode: "",
     originCbu: "",
     destinationCbu: "",
+    alertSucced: false,
   });
 
   /*const handleOpen = () => {
@@ -169,6 +170,8 @@ const PaymentModal = (props) => {
     axios.post(`http://localhost:9003/api/pago`, payment, axiosConfig).then((res) => {
       console.log(res);
       console.log(res.data);
+      props.handlePopUp();
+
     }).catch(function (error) {
       // handle error
       console.log(error);
@@ -432,11 +435,12 @@ const PaymentModal = (props) => {
 PaymentModal.propTypes = {
   open: PropTypes.bool,
   handlePaymentModalClose: PropTypes.func,
+  handlePopUp: PropTypes.func,
 };
 
 const mapStateToProps = (state) => {
   return {
-    payments: state.payments.payments.sort((a, b) => b.date - a.date),
+    payments: state.payments.payments.sort((a, b) => a.date - b.date),
   };
 };
 

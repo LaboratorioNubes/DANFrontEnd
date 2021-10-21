@@ -35,6 +35,7 @@ import * as microserviceActions from "../../actions/microserviceActions";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import PropTypes from "prop-types";
+import {Alert} from "@mui/material";
 
 
 const drawerWidth = 240;
@@ -132,6 +133,12 @@ const Dashboard = (props) => {
           console.log(resp.data);
           props.microserviceActions.setBuildings(resp.data);
         });
+    axios
+        .get(`http://localhost:9003/api/pago/cliente/1`)
+        .then((resp) => {
+          console.log(resp.data);
+          props.microserviceActions.setPayments(resp.data);
+        });
   });
 
   const classes = useStyles();
@@ -140,6 +147,7 @@ const Dashboard = (props) => {
     paymentModal: false,
     orderModal: false,
     buildingModal: false,
+    paymentAlert: false,
   });
   const handleDrawerOpen = () => {
     setDashboard({ ...dashboard, open: true });
@@ -171,6 +179,10 @@ const Dashboard = (props) => {
   const handleBuildingSiteModalClose = () => {
     setDashboard({ ...dashboard, buildingModal: false });
   }
+
+  const handlePopUp = () => {
+    setDashboard({ ...dashboard, paymentAlert: true });
+  }
   
   const fixedHeightPaperWelcome = clsx(classes.paper, classes.fixedHeight, classes.imageBck);
   const fixedHeightPaperPayment = clsx(classes.paper, classes.fixedHeight);
@@ -182,6 +194,7 @@ const Dashboard = (props) => {
         position="absolute"
         className={clsx(classes.appBar, dashboard.open && classes.appBarShift)}
       >
+        {dashboard.paymentAlert && <Alert onClose={() => { setDashboard({ ...dashboard, paymentAlert: false });}}>The payment has been successfully added — check it out!</Alert>}
         <Toolbar className={classes.toolbar}>
           <IconButton
             edge="start"
@@ -255,10 +268,9 @@ const Dashboard = (props) => {
         </Container>
       </main>
       <Modal></Modal>
-      <PaymentModal open={dashboard.paymentModal} handlePaymentModalClose={handlePaymentModalClose} />
+      <PaymentModal open={dashboard.paymentModal} handlePaymentModalClose={handlePaymentModalClose} handlePopUp={handlePopUp} />
       <OrderModal open={dashboard.orderModal} handleOrderModalClose={handleOrderModalClose} />
       <BuildingModal open={dashboard.buildingModal} handleBuildingSiteModalClose={handleBuildingSiteModalClose}/>
-
     </div>
   );
 };
