@@ -50,12 +50,12 @@ const useStyles = makeStyles((theme) => ({
 
 const PaymentModal = (props) => {
   useEffect(() => {
-    axios
-      .get(`http://localhost:9005/api/pago/1`)
-      .then((resp) => {
-        console.log(resp.data);
-        props.microserviceActions.setPayments(resp.data);
-      });
+    // axios
+    //   .get(`http://localhost:9003/api/pago/cliente/1`)
+    //   .then((resp) => {
+    //     console.log(resp.data);
+    //     props.microserviceActions.setPayments(resp.data);
+    //   });
   });
   const classes = useStyles();
   const { open } = props;
