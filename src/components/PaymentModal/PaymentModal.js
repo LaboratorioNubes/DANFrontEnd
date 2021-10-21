@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
@@ -20,6 +20,8 @@ import {
 } from "@material-ui/pickers";
 import CloseIcon from "@material-ui/icons/Close";
 import axios from "axios";
+import { bindActionCreators } from "redux";
+import * as microserviceActions from "../../actions/microserviceActions";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -46,6 +48,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PaymentModal = (props) => {
+  useEffect(() => {
+    axios
+      .get(`http://localhost:9005/api/pago/1`)
+      .then((resp) => {
+        console.log(resp.data);
+        props.microserviceActions.setPayments(resp.data);
+      });
+  });
   const classes = useStyles();
   const { open } = props;
   let dateC = new Date();
@@ -422,4 +432,16 @@ PaymentModal.propTypes = {
   handlePaymentModalClose: PropTypes.func,
 };
 
-export default PaymentModal;
+const mapStateToProps = (state) => {
+  return {
+    payments: state.payments.payments.sort((a, b) => b.date - a.date),
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    microserviceActions: bindActionCreators(microserviceActions, dispatch),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(PaymentModal);

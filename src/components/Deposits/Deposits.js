@@ -1,13 +1,11 @@
-import { React, useState, useEffect } from 'react';
+import { React } from 'react';
 import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Title from '../Title/Title';
-import axios from "axios";
 import PropTypes from "prop-types";
-import * as microserviceActions from "../../actions/microserviceActions";
 import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+
 
 function preventDefault(event) {
   event.preventDefault();
@@ -21,14 +19,6 @@ const useStyles = makeStyles({
 
 const Deposits = (props) => {
   const classes = useStyles();
-  useEffect(() => {
-    axios
-      .get(`http://localhost:9005/api/pago/1`)
-      .then((resp) => {
-        console.log(resp.data);
-        props.microserviceActions.setPayments(resp.data);
-      });
-  });
   
   return (
     <>
@@ -59,10 +49,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    microserviceActions: bindActionCreators(microserviceActions, dispatch),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Deposits);
+export default connect(mapStateToProps)(Deposits);
