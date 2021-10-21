@@ -70,7 +70,7 @@ const BuildingModal = (props) => {
       telefono: buildingForm.phone,
       descripcion: buildingForm.description,
     };
-    axios.post(`http://localhost:9003/api/obra`, building).then((res) => {
+    axios.post(`http://localhost:9005/api/obra`, building).then((res) => {
       console.log(res);
       console.log(res.data);
     });

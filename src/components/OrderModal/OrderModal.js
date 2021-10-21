@@ -187,7 +187,7 @@ const OrderModal = (props) => {
         producto: item.product,
         monto: item.amount,
         precio: item.price,
-      });
+      })
     });
 
     let order = {
@@ -197,7 +197,8 @@ const OrderModal = (props) => {
       items: detalles,
       total: orderForm.total,
     };
-    axios.post(`http://localhost:9003/api/pedido`, order).then((res) => {
+    console.log(order);
+    axios.post(`http://localhost:9002/api/pedido`, order).then((res) => {
       console.log(res);
       console.log(res.data);
     });
