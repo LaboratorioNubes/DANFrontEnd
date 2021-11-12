@@ -1,4 +1,4 @@
-import {React, useEffect, useState} from "react";
+import { React, useEffect, useState } from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -29,14 +29,13 @@ import PaymentModal from "../../components/PaymentModal/PaymentModal";
 import OrderModal from "../../components/OrderModal/OrderModal";
 import BuildingModal from "../../components/BuildingModal/BuildingModal";
 import { Modal } from "@material-ui/core";
-import buildings from '../../images/green-building-1.jpg';
+import buildings from "../../images/green-building-1.jpg";
 import axios from "axios";
 import * as microserviceActions from "../../actions/microserviceActions";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import PropTypes from "prop-types";
-import {Alert} from "@mui/material";
-
+import { Alert } from "@mui/material";
 
 const drawerWidth = 240;
 
@@ -117,28 +116,24 @@ const useStyles = makeStyles((theme) => ({
   },
   fixedHeight: {
     height: 180,
-  },  
+  },
   imageBck: {
     backgroundImage: `url(${buildings})`,
     backgroundSize: "cover",
-  }
+  },
 }));
 
 const Dashboard = (props) => {
   useEffect(() => {
     console.log("LLama obrass");
-    axios
-        .get(`http://localhost:9005/api/obra/obras/1`)
-        .then((resp) => {
-          console.log(resp.data);
-          props.microserviceActions.setBuildings(resp.data);
-        });
-    axios
-        .get(`http://localhost:9003/api/pago/cliente/1`)
-        .then((resp) => {
-          console.log(resp.data);
-          props.microserviceActions.setPayments(resp.data);
-        });
+    axios.get(`http://localhost:1000/usuarios/obra/obras/1`).then((resp) => {
+      console.log(resp.data);
+      props.microserviceActions.setBuildings(resp.data);
+    });
+    axios.get(`http://localhost:1000/cta/pago/cliente/1`).then((resp) => {
+      console.log(resp.data);
+      props.microserviceActions.setPayments(resp.data);
+    });
   });
 
   const classes = useStyles();
@@ -162,7 +157,7 @@ const Dashboard = (props) => {
 
   const handlePaymentModalClose = () => {
     setDashboard({ ...dashboard, paymentModal: false });
-  }
+  };
 
   const handleNewOrder = () => {
     setDashboard({ ...dashboard, orderModal: true });
@@ -170,7 +165,7 @@ const Dashboard = (props) => {
 
   const handleOrderModalClose = () => {
     setDashboard({ ...dashboard, orderModal: false });
-  }
+  };
 
   const handleNewBuildingSite = () => {
     setDashboard({ ...dashboard, buildingModal: true });
@@ -178,13 +173,17 @@ const Dashboard = (props) => {
 
   const handleBuildingSiteModalClose = () => {
     setDashboard({ ...dashboard, buildingModal: false });
-  }
+  };
 
   const handlePopUp = () => {
-    setDashboard({ ...dashboard, paymentAlert: true });
-  }
-  
-  const fixedHeightPaperWelcome = clsx(classes.paper, classes.fixedHeight, classes.imageBck);
+    setDashboard({ ...dashboard, paymentAlert: true, paymentModal: false });
+  };
+
+  const fixedHeightPaperWelcome = clsx(
+    classes.paper,
+    classes.fixedHeight,
+    classes.imageBck
+  );
   const fixedHeightPaperPayment = clsx(classes.paper, classes.fixedHeight);
 
   return (
@@ -194,7 +193,15 @@ const Dashboard = (props) => {
         position="absolute"
         className={clsx(classes.appBar, dashboard.open && classes.appBarShift)}
       >
-        {dashboard.paymentAlert && <Alert onClose={() => { setDashboard({ ...dashboard, paymentAlert: false });}}>The payment has been successfully added — check it out!</Alert>}
+        {dashboard.paymentAlert && (
+          <Alert
+            onClose={() => {
+              setDashboard({ ...dashboard, paymentAlert: false });
+            }}
+          >
+            The payment has been successfully added — check it out!
+          </Alert>
+        )}
         <Toolbar className={classes.toolbar}>
           <IconButton
             edge="start"
@@ -227,7 +234,10 @@ const Dashboard = (props) => {
       <Drawer
         variant="permanent"
         classes={{
-          paper: clsx(classes.drawerPaper, !dashboard.open && classes.drawerPaperClose),
+          paper: clsx(
+            classes.drawerPaper,
+            !dashboard.open && classes.drawerPaperClose
+          ),
         }}
         open={dashboard.open}
       >
@@ -237,7 +247,11 @@ const Dashboard = (props) => {
           </IconButton>
         </div>
         <Divider />
-        <MainListItems handleNewPayment={handleNewPayment} handleNewOrder={handleNewOrder} handleNewBuildingSite={handleNewBuildingSite}/>
+        <MainListItems
+          handleNewPayment={handleNewPayment}
+          handleNewOrder={handleNewOrder}
+          handleNewBuildingSite={handleNewBuildingSite}
+        />
         <Divider />
         <List>{secondaryListItems}</List>
       </Drawer>
@@ -268,9 +282,19 @@ const Dashboard = (props) => {
         </Container>
       </main>
       <Modal></Modal>
-      <PaymentModal open={dashboard.paymentModal} handlePaymentModalClose={handlePaymentModalClose} handlePopUp={handlePopUp} />
-      <OrderModal open={dashboard.orderModal} handleOrderModalClose={handleOrderModalClose} />
-      <BuildingModal open={dashboard.buildingModal} handleBuildingSiteModalClose={handleBuildingSiteModalClose}/>
+      <PaymentModal
+        open={dashboard.paymentModal}
+        handlePaymentModalClose={handlePaymentModalClose}
+        handlePopUp={handlePopUp}
+      />
+      <OrderModal
+        open={dashboard.orderModal}
+        handleOrderModalClose={handleOrderModalClose}
+      />
+      <BuildingModal
+        open={dashboard.buildingModal}
+        handleBuildingSiteModalClose={handleBuildingSiteModalClose}
+      />
     </div>
   );
 };

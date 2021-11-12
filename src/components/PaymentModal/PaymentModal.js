@@ -120,9 +120,9 @@ const PaymentModal = (props) => {
   const handleSubmit = (e) => {
     let axiosConfig = {
       headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
+        "Content-Type": "application/json;charset=UTF-8",
         "Access-Control-Allow-Origin": "*",
-      }
+      },
     };
 
     e.preventDefault();
@@ -143,14 +143,14 @@ const PaymentModal = (props) => {
       };
     } else if (paymentForm.method === "Cash") {
       payment = {
-          cliente: 1,
-          fechaPago: paymentForm.date,
-          monto: paymentForm.value,
-          efectivo: {
-            nroRecibo: paymentForm.billNum,
-          },
-          transferencia: null,
-          cheque: null,
+        cliente: 1,
+        fechaPago: paymentForm.date,
+        monto: paymentForm.value,
+        efectivo: {
+          nroRecibo: paymentForm.billNum,
+        },
+        transferencia: null,
+        cheque: null,
       };
     } else if (paymentForm.method === "Transfer") {
       payment = {
@@ -167,15 +167,17 @@ const PaymentModal = (props) => {
       };
     }
     console.log(payment);
-    axios.post(`http://localhost:9003/api/pago`, payment, axiosConfig).then((res) => {
-      console.log(res);
-      console.log(res.data);
-      props.handlePopUp();
-
-    }).catch(function (error) {
-      // handle error
-      console.log(error);
-    });
+    axios
+      .post(`http://localhost:1000/cta/pago`, payment, axiosConfig)
+      .then((res) => {
+        console.log(res);
+        console.log(res.data);
+        props.handlePopUp();
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      });
     handleClose();
   };
 

@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   sectionTitle2: {
     display: "flex",
     marginTop: "1rem",
-    marginBottom: "0"
+    marginBottom: "0",
   },
 }));
 
@@ -70,7 +70,7 @@ const BuildingModal = (props) => {
       telefono: buildingForm.phone,
       descripcion: buildingForm.description,
     };
-    axios.post(`http://localhost:9005/api/obra`, building).then((res) => {
+    axios.post(`http://localhost:1000/usuarios/obra`, building).then((res) => {
       console.log(res);
       console.log(res.data);
     });
@@ -170,13 +170,13 @@ const BuildingModal = (props) => {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                <h3
-                  id="transition-modal-section"
-                  className={classes.sectionTitle2}
-                >
-                  Description
-                </h3>
-              </Grid>
+                  <h3
+                    id="transition-modal-section"
+                    className={classes.sectionTitle2}
+                  >
+                    Description
+                  </h3>
+                </Grid>
                 <Grid item xs={12}>
                   <TextareaAutosize
                     aria-label="minimum height"
